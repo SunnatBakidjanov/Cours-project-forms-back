@@ -22,6 +22,10 @@ module.exports = function (sequelize) {
 				allowNull: false,
 				unique: true,
 			},
+			password: {
+				type: Sequelize.STRING(255),
+				allowNull: false,
+			},
 			status: {
 				type: DataTypes.ENUM('active', 'blocked'),
 				allowNull: false,

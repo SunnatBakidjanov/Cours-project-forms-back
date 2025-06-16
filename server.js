@@ -3,7 +3,7 @@ const express = require('express');
 const { sequelize, users } = require('./db/db_connect');
 
 const app = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3306;
 
 (async () => {
 	try {
