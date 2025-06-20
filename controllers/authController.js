@@ -1,10 +1,11 @@
-const { User, EmailVerification } = require('../db');
+const { User, EmailVerification } = require('../db/index');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const transporter = require('../utils/mailer');
+const { getVerificationEmail } = require('../utils/emailTemplates');
 
 exports.register = async (req, res) => {
-	const { name, surname, email, password } = req.body;
+	const { name, surname, email, password, lang, theme } = req.body;
 
 	try {
 		const existingUser = await User.findOne({ where: { email } });
@@ -23,7 +24,7 @@ exports.register = async (req, res) => {
 		});
 
 		const token = crypto.randomBytes(32).toString('hex');
-		const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 час
+		const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
 		await EmailVerification.create({
 			user_id: user.id,
@@ -31,11 +32,13 @@ exports.register = async (req, res) => {
 			expires_at: expiresAt,
 		});
 
+		const { subject, html } = getVerificationEmail(lang, name, token, theme);
+
 		await transporter.sendMail({
 			from: process.env.EMAIL_USER,
 			to: email,
-			subject: 'Confirm your email',
-			html: `<p>Click <a href="${process.env.BASE_URL}/api/verify?token=${token}">here</a> to verify your email.</p>`,
+			subject,
+			html,
 		});
 
 		return res.json({ message: 'Registration successful! Please verify your email.' });
