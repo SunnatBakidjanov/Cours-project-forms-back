@@ -10,7 +10,13 @@ exports.register = async (req, res) => {
 	try {
 		const existingUser = await User.findOne({ where: { email } });
 		if (existingUser) {
-			return res.status(400).json({ message: 'Email already exists' });
+			if (existingUser) {
+				return res.status(400).json({
+					errors: {
+						email: ['EMAIL_ALREADY_EXISTS'],
+					},
+				});
+			}
 		}
 
 		const hashedPassword = await bcrypt.hash(password, 10);
@@ -32,7 +38,7 @@ exports.register = async (req, res) => {
 			expires_at: expiresAt,
 		});
 
-		const { subject, html } = getVerificationEmail(lang, name, surname, token, theme);
+		const { subject, html } = getVerificationEmail({ lang, name, surname, token, theme });
 
 		await transporter.sendMail({
 			from: process.env.EMAIL_USER,
