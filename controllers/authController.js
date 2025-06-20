@@ -2,7 +2,7 @@ const { User, EmailVerification } = require('../db/index');
 const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const transporter = require('../utils/mailer');
-const { getVerificationEmail } = require('../utils/emailTemplates');
+const { getVerificationEmail } = require('../templates/emailTemplates');
 
 exports.register = async (req, res) => {
 	const { name, surname, email, password, lang, theme } = req.body;
@@ -32,7 +32,7 @@ exports.register = async (req, res) => {
 			expires_at: expiresAt,
 		});
 
-		const { subject, html } = getVerificationEmail(lang, name, token, theme);
+		const { subject, html } = getVerificationEmail(lang, name, surname, token, theme);
 
 		await transporter.sendMail({
 			from: process.env.EMAIL_USER,
