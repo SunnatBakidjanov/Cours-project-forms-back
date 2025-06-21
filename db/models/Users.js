@@ -7,29 +7,42 @@ module.exports = (sequelize, DataTypes) => {
 				autoIncrement: true,
 				primaryKey: true,
 			},
-			name: DataTypes.STRING(50),
-			surname: DataTypes.STRING(50),
-			email: {
-				type: DataTypes.STRING(255),
-				unique: true,
+			name: {
+				type: DataTypes.STRING(50),
 				allowNull: false,
 			},
-			password: DataTypes.STRING(255),
+			surname: {
+				type: DataTypes.STRING(50),
+				allowNull: false,
+			},
+			email: {
+				type: DataTypes.STRING(255),
+				allowNull: false,
+				unique: true,
+			},
+			password: {
+				type: DataTypes.STRING(255),
+				allowNull: false,
+			},
 			status: {
 				type: DataTypes.ENUM('pending', 'active', 'blocked'),
-				defaultValue: 'pending',
+				allowNull: false,
+				defaultValue: 'active',
 			},
 			role: {
 				type: DataTypes.ENUM('user', 'admin', 'creator'),
+				allowNull: false,
 				defaultValue: 'user',
 			},
 			created_at: {
 				type: DataTypes.DATE,
 				defaultValue: DataTypes.NOW,
+				allowNull: false,
 			},
 			last_login: {
 				type: DataTypes.DATE,
 				allowNull: true,
+				defaultValue: null,
 			},
 		},
 		{

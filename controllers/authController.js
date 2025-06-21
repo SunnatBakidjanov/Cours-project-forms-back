@@ -9,25 +9,37 @@ exports.register = async (req, res) => {
 
 	try {
 		const existingUser = await User.findOne({ where: { email } });
-		if (existingUser) {
-			if (existingUser) {
-				return res.status(400).json({
-					errors: {
-						email: ['EMAIL_ALREADY_EXISTS'],
-					},
-				});
-			}
+		if (existingUser && existingUser.status === 'active') {
+			return res.status(400).json({
+				errors: {
+					email: ['EMAIL_ALREADY_EXISTS'],
+				},
+			});
 		}
 
-		const hashedPassword = await bcrypt.hash(password, 10);
+		let user;
+		if (existingUser && existingUser.status === 'pending') {
+			user = existingUser;
 
-		const user = await User.create({
-			name,
-			surname,
-			email,
-			password: hashedPassword,
-			status: 'pending',
-		});
+			if (name) user.name = name;
+			if (surname) user.surname = surname;
+			if (password) {
+				const hashedPassword = await bcrypt.hash(password, 10);
+				user.password = hashedPassword;
+			}
+			await user.save();
+		} else if (!existingUser) {
+			const hashedPassword = await bcrypt.hash(password, 10);
+			user = await User.create({
+				name,
+				surname,
+				email,
+				password: hashedPassword,
+				status: 'pending',
+			});
+		}
+
+		await EmailVerification.destroy({ where: { user_id: user.id } });
 
 		const token = crypto.randomBytes(32).toString('hex');
 		const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
@@ -47,7 +59,11 @@ exports.register = async (req, res) => {
 			html,
 		});
 
-		return res.json({ message: 'Registration successful! Please verify your email.' });
+		return res.json({
+			successful: {
+				message: ['SUCCEFUL_MESSAGE'],
+			},
+		});
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: 'Server error' });
