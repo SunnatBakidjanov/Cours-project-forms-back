@@ -9,6 +9,7 @@ exports.register = async (req, res) => {
 
 	try {
 		const existingUser = await User.findOne({ where: { email } });
+
 		if (existingUser && existingUser.status === 'active') {
 			return res.status(400).json({
 				errors: {
@@ -17,18 +18,10 @@ exports.register = async (req, res) => {
 			});
 		}
 
-		let user;
-		if (existingUser && existingUser.status === 'pending') {
-			user = existingUser;
+		let updated = false;
+		let user = existingUser;
 
-			if (name) user.name = name;
-			if (surname) user.surname = surname;
-			if (password) {
-				const hashedPassword = await bcrypt.hash(password, 10);
-				user.password = hashedPassword;
-			}
-			await user.save();
-		} else if (!existingUser) {
+		if (!user) {
 			const hashedPassword = await bcrypt.hash(password, 10);
 			user = await User.create({
 				name,
@@ -37,32 +30,57 @@ exports.register = async (req, res) => {
 				password: hashedPassword,
 				status: 'pending',
 			});
+			updated = true;
+		} else if (user.status === 'pending') {
+			if (name && name !== user.name) {
+				user.name = name;
+				updated = true;
+			}
+
+			if (surname && surname !== user.surname) {
+				user.surname = surname;
+				updated = true;
+			}
+
+			if (updated) {
+				await user.save();
+			}
 		}
 
-		await EmailVerification.destroy({ where: { user_id: user.id } });
+		if (updated) {
+			await EmailVerification.destroy({ where: { user_id: user.id } });
 
-		const token = crypto.randomBytes(32).toString('hex');
-		const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+			const token = crypto.randomBytes(32).toString('hex');
+			const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
 
-		await EmailVerification.create({
-			user_id: user.id,
-			token,
-			expires_at: expiresAt,
-		});
+			await EmailVerification.create({
+				user_id: user.id,
+				token,
+				expires_at: expiresAt,
+			});
 
-		const { subject, html } = getVerificationEmail({ lang, name, surname, token, theme });
+			const { subject, html } = getVerificationEmail({
+				lang,
+				name: user.name,
+				surname: user.surname,
+				token,
+				theme,
+			});
 
-		await transporter.sendMail({
-			from: process.env.EMAIL_USER,
-			to: email,
-			subject,
-			html,
-		});
+			await transporter.sendMail({
+				from: process.env.EMAIL_USER,
+				to: email,
+				subject,
+				html,
+			});
+		}
 
 		return res.json({
 			successful: {
 				message: ['SUCCEFUL_MESSAGE'],
+				updatedDataMessage: ['UPDATED_DATA'],
 			},
+			status: user.status,
 		});
 	} catch (error) {
 		console.error(error);
