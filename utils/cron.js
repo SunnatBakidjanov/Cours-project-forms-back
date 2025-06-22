@@ -1,6 +1,6 @@
 const cron = require('node-cron');
 const { Op } = require('sequelize');
-const { EmailVerification } = require('../db/index'); // Подключи так, как ты подключаешь модели
+const { EmailVerification } = require('../db/index');
 
 cron.schedule('0 * * * *', async () => {
 	try {

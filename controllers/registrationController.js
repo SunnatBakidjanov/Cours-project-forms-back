@@ -19,6 +19,7 @@ exports.register = async (req, res) => {
 		}
 
 		let updated = false;
+		let isNewUser = false;
 		let user = existingUser;
 
 		if (!user) {
@@ -31,6 +32,7 @@ exports.register = async (req, res) => {
 				status: 'pending',
 			});
 			updated = true;
+			isNewUser = true;
 		} else if (user.status === 'pending') {
 			const incomingName = name?.trim();
 			const incomingSurname = surname?.trim();
@@ -76,15 +78,29 @@ exports.register = async (req, res) => {
 				subject,
 				html,
 			});
+
+			if (!isNewUser) {
+				return res.json({
+					successful: {
+						message: ['RESENDING_MESSAGE'],
+					},
+				});
+			}
 		}
 
-		return res.json({
-			successful: {
-				message: ['SUCCESSFUL_MESSAGE'],
-				updatedDataMessage: ['UPDATED_DATA'],
-			},
-			status: user.status,
-		});
+		if (isNewUser) {
+			return res.json({
+				successful: {
+					message: ['SUCCESSFUL_MESSAGE'],
+				},
+			});
+		} else {
+			return res.json({
+				successful: {
+					message: ['UPDATED_DATA'],
+				},
+			});
+		}
 	} catch (error) {
 		console.error(error);
 		res.status(500).json({ message: 'Server error' });
