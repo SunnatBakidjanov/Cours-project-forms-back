@@ -1,11 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
-	const RefreshToken = sequelize.difine('RefreshToken', {
+	const RefreshToken = sequelize.define('RefreshToken', {
 		token: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
 		user_id: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.INTEGER.UNSIGNED,
 			allowNull: false,
 		},
 		expires_at: {

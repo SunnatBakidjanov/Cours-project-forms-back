@@ -32,13 +32,16 @@ exports.register = async (req, res) => {
 			});
 			updated = true;
 		} else if (user.status === 'pending') {
-			if (name && name !== user.name) {
-				user.name = name;
+			const incomingName = name?.trim();
+			const incomingSurname = surname?.trim();
+
+			if (incomingName && incomingName !== user.name.trim()) {
+				user.name = incomingName;
 				updated = true;
 			}
 
-			if (surname && surname !== user.surname) {
-				user.surname = surname;
+			if (incomingSurname && incomingSurname !== user.surname.trim()) {
+				user.surname = incomingSurname;
 				updated = true;
 			}
 
@@ -77,7 +80,7 @@ exports.register = async (req, res) => {
 
 		return res.json({
 			successful: {
-				message: ['SUCCEFUL_MESSAGE'],
+				message: ['SUCCESSFUL_MESSAGE'],
 				updatedDataMessage: ['UPDATED_DATA'],
 			},
 			status: user.status,
