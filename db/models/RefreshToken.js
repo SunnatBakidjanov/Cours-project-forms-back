@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
 			type: DataTypes.DATE,
 			allowNull: false,
 		},
+		device_info: {
+			type: DataTypes.STRING(512),
+			allowNull: false,
+		},
 	});
 
 	return RefreshToken;

@@ -5,6 +5,7 @@ const { sequelize } = require('./db/index');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
+const refreshRouts = require('./routes/token');
 
 const app = express();
 const PORT = process.env.PORT || 3306;
@@ -18,8 +19,9 @@ app.use(
 
 app.use(bodyParser.json());
 app.use('/api', authRoutes);
+app.use('/api', refreshRouts);
 
-(async () => {
+app.use('/api')(async () => {
 	try {
 		await sequelize.authenticate();
 		await sequelize.sync({ alter: true });

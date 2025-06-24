@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const UAParser = require('ua-parser-js');
+const generateTokens = require('../utils/generateTokens');
 const { User, RefreshToken } = require('../db/index');
 
 exports.login = async (req, res) => {
@@ -10,50 +11,73 @@ exports.login = async (req, res) => {
 
 		if (!user) {
 			return res.status(400).json({
-				errors: { email: ['USER_NOT_FOUND'] },
+				errors: { message: ['INCORRECT_LOGIN_OR_PASSWORD'] },
 			});
 		}
 
 		if (user.status === 'pending') {
 			return res.status(403).json({
-				errors: { email: ['EMAIL_NOT_VERIFIED'] },
+				errors: { message: ['INCORRECT_LOGIN_OR_PASSWORD'] },
 			});
 		}
 
 		if (user.status === 'blocked') {
 			return res.status(403).json({
-				errors: { message: ['USER_BLOCKED'] },
+				errors: { blockedMessage: ['USER_BLOCKED'] },
 			});
 		}
 
 		const isMatch = await bcrypt.compare(password, user.password);
 		if (!isMatch) {
 			return res.status(400).json({
-				errors: { password: ['INVALID_PASSWORD'] },
+				errors: { message: ['INCORRECT_LOGIN_OR_PASSWORD'] },
 			});
 		}
 
 		user.last_login = new Date();
 		await user.save();
 
-		const accessToken = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '15m' });
-		const refreshToken = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+		const parser = new UAParser(req.headers['user-agent']);
+		const device = parser.getDevice();
+		const os = parser.getOS();
+		const browser = parser.getBrowser();
+
+		const deviceType = device.type || 'desktop';
+		const deviceInfo = `${deviceType} | ${os.name || 'unknown OS'} ${os.version || ''} | ${browser.name || 'unknown browser'} ${browser.version || ''}`;
+
+		const { accessToken, refreshToken } = generateTokens({
+			id: user.id,
+			email: user.email,
+		});
+
+		let existingToken = await RefreshToken.findOne({
+			where: {
+				user_id: user.id,
+				device_info: deviceInfo,
+			},
+		});
 
 		const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-		await RefreshToken.create({
-			token: refreshToken,
-			user_id: user.id,
-			expires_at: expiresAt,
-		});
+
+		if (existingToken) {
+			existingToken.token = refreshToken;
+			existingToken.expires_at = expiresAt;
+			await existingToken.save();
+		} else {
+			await RefreshToken.create({
+				token: refreshToken,
+				user_id: user.id,
+				expires_at: expiresAt,
+				device_info: deviceInfo,
+			});
+		}
 
 		return res.json({
 			accessToken,
 			refreshToken,
 			user: {
-				id: user.id,
 				name: user.name,
 				surname: user.surname,
-				email: user.email,
 			},
 		});
 	} catch (err) {
