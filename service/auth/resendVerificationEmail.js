@@ -1,7 +1,6 @@
-const crypto = require('crypto');
-
 const { getVerificationEmail } = require('../../templates/emailTemplates');
 const EmailVerification = require('../../db/models/EmailVerification');
+const gereateLinkTokens = require('../../utils/generateLinkTokens');
 const transporter = require('../../utils/mailer');
 
 const resendVerificationEmail = async (user, body) => {
@@ -9,9 +8,7 @@ const resendVerificationEmail = async (user, body) => {
 
 	await EmailVerification.destroy({ where: { user_id: user.id } });
 
-	const CRYPTO_LENGTH = 32;
-	const token = crypto.randomBytes(CRYPTO_LENGTH).toString('hex');
-	const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
+	const { token, expiresAt } = gereateLinkTokens();
 
 	await EmailVerification.create({
 		user_id: user.id,

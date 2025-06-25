@@ -5,7 +5,7 @@ const cors = require('cors');
 const sequelize = require('./db/db_connect');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
-const refreshRouts = require('./routes/token');
+const refreshRoutes = require('./routes/token');
 
 const app = express();
 const PORT = process.env.PORT || 3306;
@@ -18,17 +18,18 @@ app.use(
 );
 
 app.use(bodyParser.json());
-app.use('/api', authRoutes);
-app.use('/api', refreshRouts);
 
-app.use('/api')(async () => {
+app.use('/api', authRoutes);
+app.use('/api', refreshRoutes);
+
+app.get('/', (req, res) => {
+	res.send('Server is running.');
+});
+
+(async () => {
 	try {
 		await sequelize.authenticate();
-		await sequelize.sync({ force: true });
-
-		app.get('/', (req, res) => {
-			res.send('Server and DB are ready!');
-		});
+		await sequelize.sync();
 
 		app.listen(PORT, () => {
 			console.log(`Server is running on port ${PORT}`);

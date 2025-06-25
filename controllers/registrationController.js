@@ -1,108 +1,21 @@
-const { User, EmailVerification } = require('../db/index');
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
-const transporter = require('../utils/mailer');
-const { getVerificationEmail } = require('../templates/emailTemplates');
+const registerUser = require('../service/auth/registerUser');
+const MESSAGES = require('../constants/messages');
 
-exports.register = async (req, res) => {
-	const { name, surname, email, password, lang, theme } = req.body;
-
+const registrationController = async (req, res) => {
 	try {
-		const existingUser = await User.findOne({ where: { email } });
+		const result = await registerUser(req.user, req.body);
 
-		if (existingUser && existingUser.status === 'active') {
-			return res.status(400).json({
-				errors: {
-					email: ['EMAIL_ALREADY_EXISTS'],
-				},
-			});
-		}
-
-		let updated = false;
-		let isNewUser = false;
-		let user = existingUser;
-
-		if (!user) {
-			const hashedPassword = await bcrypt.hash(password, 10);
-			user = await User.create({
-				name,
-				surname,
-				email,
-				password: hashedPassword,
-				status: 'pending',
-			});
-			updated = true;
-			isNewUser = true;
-		} else if (user.status === 'pending') {
-			const incomingName = name?.trim();
-			const incomingSurname = surname?.trim();
-
-			if (incomingName && incomingName !== user.name.trim()) {
-				user.name = incomingName;
-				updated = true;
-			}
-
-			if (incomingSurname && incomingSurname !== user.surname.trim()) {
-				user.surname = incomingSurname;
-				updated = true;
-			}
-
-			if (updated) {
-				await user.save();
-			}
-		}
-
-		if (updated) {
-			await EmailVerification.destroy({ where: { user_id: user.id } });
-
-			const token = crypto.randomBytes(32).toString('hex');
-			const expiresAt = new Date(Date.now() + 60 * 60 * 1000);
-
-			await EmailVerification.create({
-				user_id: user.id,
-				token,
-				expires_at: expiresAt,
-			});
-
-			const { subject, html } = getVerificationEmail({
-				lang,
-				name: user.name,
-				surname: user.surname,
-				token,
-				theme,
-			});
-
-			await transporter.sendMail({
-				from: process.env.EMAIL_USER,
-				to: email,
-				subject,
-				html,
-			});
-
-			if (!isNewUser) {
-				return res.json({
-					successful: {
-						message: ['RESENDING_MESSAGE'],
-					},
-				});
-			}
-		}
-
-		if (isNewUser) {
-			return res.json({
-				successful: {
-					message: ['SUCCESSFUL_MESSAGE'],
-				},
-			});
-		} else {
-			return res.json({
-				successful: {
-					message: ['UPDATED_DATA'],
-				},
-			});
-		}
+		res.json({
+			successful: {
+				message: [MESSAGES.SUCCESSFUL[result]],
+			},
+		});
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ message: 'Server error' });
+		res.status(500).json({
+			message: MESSAGES.SERVER_ERROR,
+		});
 	}
 };
+
+module.exports = registrationController;
