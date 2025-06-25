@@ -1,8 +1,8 @@
 require('dotenv').config();
 require('./utils/cron');
 const express = require('express');
-const dbConnect = require('./db/db_connect');
 const cors = require('cors');
+const sequelize = require('./db/db_connect');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const refreshRouts = require('./routes/token');
@@ -23,8 +23,8 @@ app.use('/api', refreshRouts);
 
 app.use('/api')(async () => {
 	try {
-		await dbConnect.authenticate();
-		await dbConnect.sync({ force: true });
+		await sequelize.authenticate();
+		await sequelize.sync({ force: true });
 
 		app.get('/', (req, res) => {
 			res.send('Server and DB are ready!');

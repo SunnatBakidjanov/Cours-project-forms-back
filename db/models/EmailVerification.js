@@ -1,5 +1,5 @@
-module.exports = (sequelize, DataTypes) => {
-	const EmailVerification = sequelize.define(
+const EmailVerification = (sequelize, DataTypes) => {
+	return sequelize.define(
 		'EmailVerification',
 		{
 			id: {
@@ -25,6 +25,6 @@ module.exports = (sequelize, DataTypes) => {
 			tableName: 'email_verifications',
 		}
 	);
-
-	return EmailVerification;
 };
+
+module.exports = EmailVerification;

@@ -1,0 +1,24 @@
+const User = require('../db/models/Users');
+const MESSAGES = require('../constants/messages');
+
+module.exports = async (req, res, next) => {
+	const { email } = req.body;
+
+	try {
+		const user = await User.findOne({ where: { email } });
+
+		if (!user) {
+			return res.status(404).json({ message: MESSAGES.USER.USER_NOT_FOUND });
+		}
+
+		if (user.status === 'active') {
+			return res.status(400).json({ message: MESSAGES.USER.USER_STATUS_ACTIVE });
+		}
+
+		req.user = user;
+		next();
+	} catch (error) {
+		console.error(error);
+		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
+	}
+};

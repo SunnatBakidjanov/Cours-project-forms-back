@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const sequelize = require('./db_connect');
 
 const User = require('./models/Users')(sequelize, DataTypes);
 const EmailVerification = require('./models/EmailVerification')(sequelize, DataTypes);

@@ -1,5 +1,5 @@
-module.exports = (sequelize, DataTypes) => {
-	const RefreshToken = sequelize.define('RefreshToken', {
+const RefreshToken = (sequelize, DataTypes) => {
+	return sequelize.define('RefreshToken', {
 		token: {
 			type: DataTypes.STRING,
 			allowNull: false,
@@ -17,6 +17,6 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 	});
-
-	return RefreshToken;
 };
+
+module.exports = RefreshToken;
