@@ -1,10 +1,11 @@
 const bcrypt = require('bcrypt');
 
 const MESSAGES = require('../../constants/messages');
-const User = require('../../db/models/Users');
+const sendVerificationEmail = require('./sendVerificationEmail');
+const { User } = require('../../db/index');
 
 const registerUser = async (user, body) => {
-	const { name, surname, email, password, lang, theme } = body;
+	const { name, surname, email, password } = body;
 
 	let updated = false;
 	let isNewUser = false;
@@ -40,7 +41,7 @@ const registerUser = async (user, body) => {
 	}
 
 	if (updated) {
-		await sendVerificationEmail(user, lang, theme);
+		await sendVerificationEmail(user, body);
 		return isNewUser ? MESSAGES.SUCCESSFUL.SUCCESSFUL_MESSAGE : MESSAGES.SUCCESSFUL.RESENDING_MESSAGE;
 	}
 

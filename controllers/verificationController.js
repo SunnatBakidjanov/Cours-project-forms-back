@@ -1,28 +1,15 @@
-const { User, EmailVerification } = require('../db');
+const changeUserStatus = require('../service/auth/changeUserStatus');
+const MESSAGES = require('../constants/messages');
 
-exports.verifyEmail = async (req, res) => {
-	const { token } = req.query;
-
+const verificationController = async (req, res) => {
 	try {
-		const record = await EmailVerification.findOne({ where: { token } });
-		if (!record) {
-			return res.status(400).json({ message: 'Invalid or expired token' });
-		}
-
-		if (record.expires_at < new Date()) {
-			await EmailVerification.destroy({ where: { id: record.id } });
-			return res.status(400).json({ message: 'Token expired. Please register again.' });
-		}
-
-		const user = await User.findByPk(record.user_id);
-		user.status = 'active';
-		await user.save();
-
-		await EmailVerification.destroy({ where: { id: record.id } });
+		await changeUserStatus(req.record);
 
 		res.redirect('https://sunnatbakidjanov.codes/login');
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ message: 'Server error' });
+		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
 	}
 };
+
+module.exports = verificationController;

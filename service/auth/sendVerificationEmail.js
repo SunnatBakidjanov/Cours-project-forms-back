@@ -1,9 +1,9 @@
 const { getVerificationEmail } = require('../../templates/emailTemplates');
-const EmailVerification = require('../../db/models/EmailVerification');
+const { EmailVerification } = require('../../db/index');
 const gereateLinkTokens = require('../../utils/generateLinkTokens');
 const transporter = require('../../utils/mailer');
 
-const resendVerificationEmail = async (user, body) => {
+const sendVerificationEmail = async (user, body) => {
 	const { lang, theme } = body;
 
 	await EmailVerification.destroy({ where: { user_id: user.id } });
@@ -32,4 +32,4 @@ const resendVerificationEmail = async (user, body) => {
 	});
 };
 
-module.exports = resendVerificationEmail;
+module.exports = sendVerificationEmail;

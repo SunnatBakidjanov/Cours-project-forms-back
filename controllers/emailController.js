@@ -1,5 +1,5 @@
 const MESSAGES = require('../constants/messages');
-const resendVerificationEmail = require('../service/auth/resendVerificationEmail');
+const resendVerificationEmail = require('../service/auth/sendVerificationEmail');
 
 const emeailController = async (req, res) => {
 	try {

@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const UAParser = require('ua-parser-js');
-const generateTokens = require('../utils/generateTokens');
+const generateTokens = require('../utils/generateJWTTokens');
 const { User, RefreshToken } = require('../db/index');
 
 exports.login = async (req, res) => {
