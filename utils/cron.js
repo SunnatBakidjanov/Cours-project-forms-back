@@ -12,6 +12,6 @@ cron.schedule('0 * * * *', async () => {
 			},
 		});
 	} catch (error) {
-		console.error('❌ Error cleaning expired tokens:', error);
+		console.error('Error cleaning expired tokens:', error);
 	}
 });

@@ -1,7 +1,7 @@
 require('dotenv').config();
 require('./utils/cron');
 const express = require('express');
-const { sequelize } = require('./db/index');
+const dbConnect = require('./db/db_connect');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
@@ -23,17 +23,17 @@ app.use('/api', refreshRouts);
 
 app.use('/api')(async () => {
 	try {
-		await sequelize.authenticate();
-		await sequelize.sync({ alter: true });
+		await dbConnect.authenticate();
+		await dbConnect.sync({ force: true });
 
 		app.get('/', (req, res) => {
-			res.send('🚀 Server and DB are ready!');
+			res.send('Server and DB are ready!');
 		});
 
 		app.listen(PORT, () => {
-			console.log(`🚀 Server is running on port ${PORT}`);
+			console.log(`Server is running on port ${PORT}`);
 		});
 	} catch (error) {
-		console.error('❌ Unable to connect to the database:', error);
+		console.error('Unable to connect to the database:', error);
 	}
 })();

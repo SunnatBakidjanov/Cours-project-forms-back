@@ -23,7 +23,7 @@ exports.login = async (req, res) => {
 
 		if (user.status === 'blocked') {
 			return res.status(403).json({
-				errors: { blockedMessage: ['USER_BLOCKED'] },
+				errors: { message: ['USER_BLOCKED'] },
 			});
 		}
 
