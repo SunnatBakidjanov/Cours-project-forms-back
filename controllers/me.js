@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const { User } = require('../../db');
-const MESSAGES = require('../../constants/messages');
+const { User } = require('../db/index');
+const MESSAGES = require('../constants/messages');
 
 exports.getMe = async (req, res) => {
 	try {
