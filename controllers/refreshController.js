@@ -63,6 +63,6 @@ exports.refresh = async (req, res) => {
 		});
 	} catch (err) {
 		console.error('Refresh error:', err);
-		return res.status(401).json({ message: MESSAGES.REFRESH.INVALID });
+		return res.status(401).json({ message: 'MESSAGES.REFRESH.INVALID' });
 	}
 };

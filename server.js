@@ -2,6 +2,7 @@ require('dotenv').config();
 require('./utils/cron');
 const express = require('express');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const sequelize = require('./db/db_connect');
 const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
@@ -9,6 +10,8 @@ const refreshRoutes = require('./routes/token');
 
 const app = express();
 const PORT = process.env.PORT || 3306;
+
+app.use(cookieParser());
 
 app.use(
 	cors({
