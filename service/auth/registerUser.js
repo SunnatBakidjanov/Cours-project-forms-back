@@ -37,11 +37,18 @@ const registerUser = async (user, body) => {
 			updated = true;
 		}
 
+		const passwordChanged = password && !(await bcrypt.compare(password, user.password));
+		if (passwordChanged) {
+			user.password = await bcrypt.hash(password, 10);
+			updated = true;
+		}
+
 		if (updated) await user.save();
 	}
 
+	await sendVerificationEmail(user, body);
+
 	if (updated) {
-		await sendVerificationEmail(user, body);
 		return isNewUser ? MESSAGES.SUCCESSFUL.SUCCESSFUL_MESSAGE : MESSAGES.SUCCESSFUL.RESENDING_MESSAGE;
 	}
 

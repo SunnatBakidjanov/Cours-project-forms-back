@@ -24,7 +24,7 @@ exports.refresh = async (req, res) => {
 			return res.status(401).json({ message: 'USER_BLOCKED_OR_NOT_ACTIVE' });
 		}
 
-		const newAccessToken = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '15m' });
+		const newAccessToken = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '5m' });
 
 		return res.json({
 			accessToken: newAccessToken,

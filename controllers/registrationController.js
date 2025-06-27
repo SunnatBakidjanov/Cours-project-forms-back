@@ -7,7 +7,7 @@ const registrationController = async (req, res) => {
 
 		res.json({
 			successful: {
-				message: [MESSAGES.SUCCESSFUL[result]],
+				message: result,
 			},
 		});
 	} catch (error) {

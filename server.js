@@ -12,11 +12,10 @@ const PORT = process.env.PORT || 3306;
 
 app.use(
 	cors({
-		origin: 'https://sunnatbakidjanov.codes',
+		origin: ['https://sunnatbakidjanov.codes', 'http://localhost:5173'],
 		credentials: true,
 	})
 );
-
 app.use(bodyParser.json());
 
 app.use('/api', authRoutes);

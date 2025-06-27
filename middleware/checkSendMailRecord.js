@@ -6,6 +6,7 @@ module.exports = async (req, res, next) => {
 
 	try {
 		const record = await EmailVerification.findOne({ where: { token } });
+
 		if (!record) {
 			return res.status(400).json({ message: MESSAGES.MAIL_SEND_TOKEN.INVALID_TOKEN });
 		}
