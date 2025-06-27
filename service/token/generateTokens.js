@@ -1,27 +1,17 @@
 const generateJWTTokens = require('../../utils/generateJWTTokens');
 const { RefreshToken } = require('../../db/index');
-const UAParser = require('ua-parser-js');
+const getDeviceInfo = require('../../utils/getDeviceInfo');
+const TOKENS_LIVES = require('../../constants/token-lives');
 
 const generateTokens = async (user, userAgent) => {
-	const parser = new UAParser(userAgent || '');
-	const device = parser.getDevice();
-	const os = parser.getOS();
-	const browser = parser.getBrowser();
-
-	const deviceType = device.type || 'desktop';
-	const osName = os.name || 'unknown OS';
-	const osVersion = os.version || '';
-	const browserName = browser.name || 'unknown browser';
-	const browserVersion = browser.version || '';
-
-	const deviceInfo = `${deviceType} | ${osName} ${osVersion} | ${browserName} ${browserVersion}`.trim();
+	const deviceInfo = getDeviceInfo(userAgent);
 
 	const { accessToken, refreshToken } = generateJWTTokens({
 		id: user.id,
 		email: user.email,
 	});
 
-	const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+	const expiresAt = new Date(Date.now() + TOKENS_LIVES.REFRESH_TOKEN_DATE);
 
 	const [existingToken, created] = await RefreshToken.findOrCreate({
 		where: { user_id: user.id, device_info: deviceInfo },

@@ -1,0 +1,7 @@
+const TOKENS_LIVES = Object.freeze({
+	ACCESS_TOKEN_LIVE_TIME_STR: '30s',
+	REFRESH_TOKEN_LIVE_TIME_STR: '7d',
+	REFRESH_TOKEN_DATE: 7 * 24 * 60 * 60 * 1000,
+});
+
+module.exports = TOKENS_LIVES;
