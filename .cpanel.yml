@@ -1,0 +1,8 @@
+---
+deployment:
+  tasks:
+    - echo "Deploying Node.js app..."
+    - cd /home/sunnitsl/api.sunnatbakidjanov.codes
+    - npm install --production
+    - mkdir -p tmp
+    - touch tmp/restart.txt
