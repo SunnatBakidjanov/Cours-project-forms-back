@@ -8,6 +8,6 @@ const userController = require('../controllers/userController');
 
 router.post('/refresh-token', refresh);
 
-router.get('/api/check-accec-token', checkAccessToken, userController);
+router.get('/check-me', checkAccessToken, userController);
 
 module.exports = router;
