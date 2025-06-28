@@ -48,6 +48,10 @@ const Users = (sequelize, DataTypes) => {
 		{
 			timestamps: false,
 			tableName: 'users',
+			defaultScope: {
+				attributes: { exclude: ['password'] },
+			},
+			indexes: [{ fields: ['status'] }, { fields: ['role'] }],
 		}
 	);
 };
