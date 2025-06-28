@@ -1,52 +1,44 @@
-import axios from 'axios';
-import { useReducer } from 'react';
-import { useDispatch } from 'react-redux';
-import { logout } from '../redux/slices/authSlice';
-import { useNavigate } from 'react-router-dom';
+require('dotenv').config();
+require('./utils/cron');
+const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const sequelize = require('./db/db_connect');
+const bodyParser = require('body-parser');
+const authRoutes = require('./routes/auth');
+const logoutRoutes = require('./routes/logout');
+const refreshRoutes = require('./routes/token');
 
-const APP_URL = import.meta.env.VITE_API_URL;
+const app = express();
+const PORT = process.env.PORT || 3306;
 
-const initialState = {
-	isLoading: false,
-	error: null,
-};
+app.use(cookieParser());
 
-const ACTIONS = {
-	SET_LOADING: 'SET_LOADING',
-	SET_ERROR: 'SET_ERROR',
-};
+app.use(
+	cors({
+		origin: ['https://sunnatbakidjanov.codes', 'http://localhost:5173'],
+		credentials: true,
+	})
+);
+app.use(bodyParser.json());
 
-const reducer = (state, { type, payload }) => {
-	switch (type) {
-		case ACTIONS.SET_LOADING:
-			return { ...state, isLoading: payload };
-		case ACTIONS.SET_ERROR:
-			return { ...state, error: payload };
-		default:
-			return state;
+app.use('/api', authRoutes);
+app.use('/api', logoutRoutes);
+app.use('/api', refreshRoutes);
+
+app.get('/', (req, res) => {
+	res.send('Server is running.');
+});
+
+(async () => {
+	try {
+		await sequelize.authenticate();
+		await sequelize.sync();
+
+		app.listen(PORT, () => {
+			console.log(`Server is running on port ${PORT}`);
+		});
+	} catch (error) {
+		console.error('Unable to connect to the database:', error);
 	}
-};
-
-export const useLogout = () => {
-	const [state, dispatchLocal] = useReducer(reducer, initialState);
-	const dispatch = useDispatch();
-
-	const logoutHandler = async () => {
-		dispatchLocal({ type: ACTIONS.SET_LOADING, payload: true });
-
-		try {
-			await axios.post(`${APP_URL}/api/logout`, {}, { withCredentials: true });
-
-			dispatch(logout());
-		} catch (error) {
-			dispatchLocal({
-				type: ACTIONS.SET_ERROR,
-				payload: error.response?.data?.message || 'Logout failed',
-			});
-		} finally {
-			dispatchLocal({ type: ACTIONS.SET_LOADING, payload: false });
-		}
-	};
-
-	return { logoutHandler, ...state };
-};
+})();
