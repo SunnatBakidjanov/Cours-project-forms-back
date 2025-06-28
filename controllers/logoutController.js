@@ -13,8 +13,9 @@ const logout = async (req, res) => {
 
 		res.clearCookie('refreshToken', {
 			httpOnly: true,
-			secure: true,
-			sameSite: 'Strict',
+			secure: false,
+			sameSite: 'None',
+			path: '/',
 		});
 
 		return res.json({ message: MESSAGES.REFRESH.SUCCESS });
