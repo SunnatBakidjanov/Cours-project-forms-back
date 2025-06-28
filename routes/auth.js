@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const checkUnverifiedUser = require('../middleware/checkUnverifiedUser');
-const checkUserNotActive = require('../middleware/checkUserNotActive');
+const checkActiveUser = require('../middleware/checkActiveUser');
 const checkSendMailRecord = require('../middleware/checkSendMailRecord');
 const checkLoginUser = require('../middleware/checkLoginUser');
 
@@ -11,7 +11,7 @@ const verificationController = require('../controllers/verificationController');
 const loginController = require('../controllers/loginController');
 const emeailController = require('../controllers/emailController');
 
-router.post('/register', checkUserNotActive, registrationController);
+router.post('/register', checkActiveUser, registrationController);
 
 router.get('/verify', checkSendMailRecord, verificationController);
 
