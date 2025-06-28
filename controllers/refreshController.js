@@ -52,14 +52,14 @@ exports.refresh = async (req, res) => {
 
 		res.cookie('refreshToken', newRefreshToken, {
 			httpOnly: true,
-			secure: true,
-			sameSite: 'Strict',
+			secure: false,
+			sameSite: 'None',
 			maxAge: TOKENS_LIVES.REFRESH_TOKEN_DATE,
 		});
 
 		return res.json({
 			accessToken,
-			message: MESSAGES.REFRESH.SUCCESS,
+			message: 'MESSAGES.REFRESH.SUCCESS',
 		});
 	} catch (err) {
 		console.error('Refresh error:', err);
