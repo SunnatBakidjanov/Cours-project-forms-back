@@ -11,7 +11,7 @@ const getUserById = async id => {
 	}
 
 	if (user.status !== 'active') {
-		const error = new Error(MESSAGES.USER.BLOCKED);
+		const error = new Error(MESSAGES.USER.USER_STATUS_BLOCKED);
 		error.status = 403;
 		throw error;
 	}
