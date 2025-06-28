@@ -1,7 +1,7 @@
 const { RefreshToken } = require('../db/index');
 const MESSAGES = require('../constants/messages');
 
-exports.logout = async (req, res) => {
+const logout = async (req, res) => {
 	const refreshToken = req.cookies.refreshToken;
 
 	if (!refreshToken) {
@@ -23,3 +23,5 @@ exports.logout = async (req, res) => {
 		return res.status(500).json({ message: MESSAGES.SERVER_ERROR });
 	}
 };
+
+module.exports = logout;
