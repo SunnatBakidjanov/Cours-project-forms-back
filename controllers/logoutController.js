@@ -1,17 +1,25 @@
 const { RefreshToken } = require('../db/index');
+const MESSAGES = require('../constants/messages');
 
 exports.logout = async (req, res) => {
-	const { refreshToken } = req.body;
+	const refreshToken = req.cookies.refreshToken;
 
 	if (!refreshToken) {
-		return res.status(400).json({ message: 'NO_REFRESH_TOKEN' });
+		return res.status(400).json({ message: MESSAGES.REFRESH.NO_TOKEN });
 	}
 
 	try {
 		await RefreshToken.destroy({ where: { token: refreshToken } });
-		return res.json({ message: 'LOGOUT_SUCCESS' });
-	} catch (err) {
-		console.error(err);
-		return res.status(500).json({ message: 'Server error' });
+
+		res.clearCookie('refreshToken', {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'Strict',
+		});
+
+		return res.json({ message: MESSAGES.REFRESH.SUCCESS });
+	} catch (error) {
+		console.error('Logout error:', error);
+		return res.status(500).json({ message: MESSAGES.SERVER_ERROR });
 	}
 };
