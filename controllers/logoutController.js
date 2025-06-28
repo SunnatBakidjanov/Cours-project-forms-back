@@ -18,9 +18,8 @@ const logout = async (req, res) => {
 			path: '/',
 		});
 
-		return res.json({ message: MESSAGES.REFRESH.SUCCESS });
+		return res.json({ message: MESSAGES.REFRESH.DELETED });
 	} catch (error) {
-		console.error('Logout error:', error);
 		return res.status(500).json({ message: MESSAGES.SERVER_ERROR });
 	}
 };

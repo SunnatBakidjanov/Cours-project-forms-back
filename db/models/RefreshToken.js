@@ -22,6 +22,15 @@ const RefreshToken = (sequelize, DataTypes) => {
 		{
 			timestamps: false,
 			tableName: 'refresh_token',
+			indexes: [
+				{
+					unique: true,
+					fields: ['token'],
+				},
+				{
+					fields: ['user_id', 'device_info'],
+				},
+			],
 		}
 	);
 };

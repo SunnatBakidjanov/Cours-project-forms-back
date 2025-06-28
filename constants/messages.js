@@ -20,6 +20,7 @@ const MESSAGES = Object.freeze({
 		NO_TOKEN: 'NO_TOKEN',
 		INVALID: 'INVALID_TOKEN',
 		EXPIRED: 'TOKEN-EXPIRED',
+		DELETED: 'DELETED',
 	},
 
 	USER: {
