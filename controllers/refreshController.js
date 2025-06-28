@@ -53,7 +53,7 @@ exports.refresh = async (req, res) => {
 		res.cookie('refreshToken', newRefreshToken, {
 			httpOnly: true,
 			secure: false,
-			sameSite: 'None',
+			sameSite: 'Lax',
 			maxAge: TOKENS_LIVES.REFRESH_TOKEN_DATE,
 		});
 
