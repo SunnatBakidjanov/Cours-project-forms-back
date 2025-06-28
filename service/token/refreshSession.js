@@ -45,12 +45,6 @@ const refreshSession = async req => {
 	}
 
 	const user = await User.findByPk(payload.id);
-	if (!user || user.status !== 'active') {
-		const error = new Error(MESSAGES.USER.BLOCKED_OR_INACTIVE);
-		error.status = 403;
-		throw error;
-	}
-
 	const { accessToken, refreshToken: newRefreshToken } = generateJWTTokens({
 		id: user.id,
 		email: user.email,
