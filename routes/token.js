@@ -3,7 +3,7 @@ const router = express.Router();
 
 const checkAccessToken = require('../middleware/checkAccessToken');
 
-const { refresh } = require('../controllers/refreshController');
+const refresh = require('../controllers/refreshController');
 const userController = require('../controllers/userController');
 
 router.post('/refresh-token', refresh);
