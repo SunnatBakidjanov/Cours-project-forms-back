@@ -46,7 +46,7 @@ const Users = (sequelize, DataTypes) => {
 			},
 		},
 		{
-			timestamps: true,
+			timestamps: false,
 			tableName: 'users',
 			indexes: [{ fields: ['status'] }, { fields: ['role'] }],
 		}
