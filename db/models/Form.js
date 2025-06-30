@@ -9,10 +9,6 @@ const Form = (sequelize, DataTypes) => {
 				primaryKey: true,
 				autoIncrement: true,
 			},
-			template_id: {
-				type: DataTypes.INTEGER.UNSIGNED,
-				allowNull: false,
-			},
 			user_id: {
 				type: DataTypes.INTEGER.UNSIGNED,
 				allowNull: false,
@@ -20,19 +16,37 @@ const Form = (sequelize, DataTypes) => {
 			key: {
 				type: DataTypes.STRING,
 				unique: true,
-				allowNull: false,
 				defaultValue: () => uuidv4(),
 			},
+			title: {
+				type: DataTypes.STRING(100),
+				allowNull: true,
+			},
+			description: {
+				type: DataTypes.TEXT,
+				allowNull: true,
+			},
+			theme: {
+				type: DataTypes.STRING(50),
+				allowNull: true,
+				defaultValue: 'Other',
+			},
+			imageUrl: {
+				type: DataTypes.STRING,
+				allowNull: true,
+			},
+			isPublic: {
+				type: DataTypes.BOOLEAN,
+				allowNull: false,
+				defaultValue: false,
+			},
 			createdAt: DataTypes.DATE,
+			updatedAt: DataTypes.DATE,
 		},
 		{
 			tableName: 'forms',
 			timestamps: true,
-			indexes: [
-				{
-					fields: ['key'],
-				},
-			],
+			indexes: [{ fields: ['key'] }],
 		}
 	);
 };
