@@ -1,4 +1,4 @@
-const { Template, User } = require('../db/models/Template');
+const { Template, User } = require('../db/index');
 const MESSAGE = require('../constants/messages');
 
 exports.createTemplate = async (req, res) => {
