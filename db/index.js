@@ -24,5 +24,6 @@ module.exports = {
 	EmailVerification,
 	RefreshToken,
 	Template,
+	Question,
 	sequelize,
 };
