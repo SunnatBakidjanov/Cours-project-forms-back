@@ -21,7 +21,7 @@ const EmailVerification = (sequelize, DataTypes) => {
 			},
 		},
 		{
-			timestamps: false,
+			timestamps: true,
 			tableName: 'email_verifications',
 		}
 	);

@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const logoutRoutes = require('./routes/logout');
 const refreshRoutes = require('./routes/token');
+const templateRoutes = require('./routes/templates');
 
 const app = express();
 const PORT = process.env.PORT || 3306;
@@ -26,6 +27,7 @@ app.use(bodyParser.json());
 app.use('/api', authRoutes);
 app.use('/api', logoutRoutes);
 app.use('/api', refreshRoutes);
+app.use('/api', templateRoutes);
 
 app.get('/', (req, res) => {
 	res.send('Server is running.');

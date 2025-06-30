@@ -20,7 +20,7 @@ const RefreshToken = (sequelize, DataTypes) => {
 			},
 		},
 		{
-			timestamps: false,
+			timestamps: true,
 			tableName: 'refresh_token',
 			indexes: [
 				{
