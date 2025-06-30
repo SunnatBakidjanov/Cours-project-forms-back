@@ -34,11 +34,6 @@ const Users = (sequelize, DataTypes) => {
 				allowNull: false,
 				defaultValue: 'user',
 			},
-			created_at: {
-				type: DataTypes.DATE,
-				defaultValue: DataTypes.NOW,
-				allowNull: false,
-			},
 			last_login: {
 				type: DataTypes.DATE,
 				allowNull: true,
@@ -46,7 +41,7 @@ const Users = (sequelize, DataTypes) => {
 			},
 		},
 		{
-			timestamps: false,
+			timestamps: true,
 			tableName: 'users',
 			indexes: [{ fields: ['status'] }, { fields: ['role'] }],
 		}

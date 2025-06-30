@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const templateController = require('../controllers/templateController');
-const authenticate = require('../middleware/authenticate');
+const checkAccessToken = require('../middleware/checkAccessToken');
 
-router.post('/templates', authenticate, templateController.createTemplate);
+router.post('/templates', checkAccessToken, templateController.createTemplate);
 
 router.get('/templates', templateController.getAllTemplates);
 
