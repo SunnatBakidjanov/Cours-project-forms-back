@@ -3,14 +3,13 @@ const MESSAGE = require('../constants/messages');
 
 exports.createTemplate = async (req, res) => {
 	try {
-		const { title, description, theme, imageUrl, isPublic } = req.body;
+		const { title, description, theme, isPublic } = req.body;
 		const userId = req.user.id;
 
 		const newTemplate = await Template.create({
 			title,
 			description,
 			theme,
-			imageUrl,
 			isPublic,
 			user_id: userId,
 		});

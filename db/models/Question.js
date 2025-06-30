@@ -1,14 +1,18 @@
-const Template = (sequelize, DataTypes) => {
+const Question = (sequelize, DataTypes) => {
 	return sequelize.define(
-		'Template',
+		'Question',
 		{
 			id: {
 				type: DataTypes.INTEGER.UNSIGNED,
-				primaryKey: true,
 				autoIncrement: true,
+				primaryKey: true,
 			},
-			user_id: {
+			template_id: {
 				type: DataTypes.INTEGER.UNSIGNED,
+				allowNull: false,
+			},
+			type: {
+				type: DataTypes.ENUM('shortText', 'longText', 'number', 'checkbox'),
 				allowNull: false,
 			},
 			title: {
@@ -19,22 +23,20 @@ const Template = (sequelize, DataTypes) => {
 				type: DataTypes.TEXT,
 				allowNull: true,
 			},
-			theme: {
-				type: DataTypes.STRING(50),
-				allowNull: false,
-				defaultValue: 'Other',
-			},
-			isPublic: {
+			showInTable: {
 				type: DataTypes.BOOLEAN,
-				allowNull: false,
-				defaultValue: true,
+				defaultValue: false,
+			},
+			order: {
+				type: DataTypes.INTEGER.UNSIGNED,
+				defaultValue: 0,
 			},
 		},
 		{
+			tableName: 'question',
 			timestamps: true,
-			tableName: 'template',
 		}
 	);
 };
 
-module.exports = Template;
+module.exports = Question;
