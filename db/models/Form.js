@@ -18,6 +18,16 @@ const Form = (sequelize, DataTypes) => {
 				unique: true,
 				defaultValue: () => uuidv4(),
 			},
+			title: {
+				type: DataTypes.STRING(100),
+				allowNull: true,
+				defaultValue: null,
+			},
+			description: {
+				type: DataTypes.TEXT,
+				allowNull: true,
+				defaultValue: null,
+			},
 			isPublic: {
 				type: DataTypes.BOOLEAN,
 				allowNull: false,
