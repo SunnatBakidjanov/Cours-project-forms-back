@@ -9,7 +9,7 @@ const authRoutes = require('./routes/auth');
 const logoutRoutes = require('./routes/logout');
 const refreshRoutes = require('./routes/token');
 const templateRoutes = require('./routes/templates');
-const QuestionRoutes = require('./routes/question');
+const questionRoutes = require('./routes/question');
 
 const app = express();
 const PORT = process.env.PORT || 3306;
@@ -29,7 +29,7 @@ app.use('/api', authRoutes);
 app.use('/api', logoutRoutes);
 app.use('/api', refreshRoutes);
 app.use('/api', templateRoutes);
-app.use('/api', QuestionRoutes);
+app.use('/api', questionRoutes);
 
 app.get('/', (req, res) => {
 	res.send('Server is running.');
