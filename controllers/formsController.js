@@ -3,7 +3,7 @@ const createForm = require('../service/form/createForm');
 
 exports.createForm = async (req, res) => {
 	try {
-		await createForm(req);
+		const newForm = await createForm(req);
 
 		res.status(201).json(newForm);
 	} catch (error) {
