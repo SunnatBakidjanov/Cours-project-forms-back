@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const MESSAGES = require('../constants/messages');
 
-module.exports = async (req, res, next) => {
+module.exports = (req, res, next) => {
 	const authHeader = req.headers.authorization;
 
 	if (!authHeader || !authHeader.startsWith('Bearer ')) {

@@ -8,6 +8,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/auth');
 const logoutRoutes = require('./routes/logout');
 const refreshRoutes = require('./routes/token');
+const formsRoutes = require('./routes/form');
 const templateRoutes = require('./routes/templates');
 const questionRoutes = require('./routes/question');
 
@@ -28,6 +29,7 @@ app.use(bodyParser.json());
 app.use('/api', authRoutes);
 app.use('/api', logoutRoutes);
 app.use('/api', refreshRoutes);
+app.use('/api', formsRoutes);
 app.use('/api', templateRoutes);
 app.use('/api', questionRoutes);
 

@@ -23,6 +23,10 @@ const MESSAGES = Object.freeze({
 		DELETED: 'DELETED',
 	},
 
+	FORMS: {
+		CREATE: 'FORM_CREATED',
+	},
+
 	TEMPLATES: {
 		NO_ACCESS_TO_TEMPLATE: 'NO_ACCESS_TO_TEMPLATE',
 	},
