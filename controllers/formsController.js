@@ -40,9 +40,6 @@ exports.updateForm = async (req, res) => {
 	}
 };
 
-const { Forms, User } = require('../db/index');
-const MESSAGES = require('../constants/messages');
-
 exports.getFormByKey = async (req, res) => {
 	try {
 		const { key } = req.params;
