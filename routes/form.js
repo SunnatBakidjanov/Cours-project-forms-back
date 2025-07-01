@@ -8,6 +8,6 @@ router.post('/create-form', checkAccessToken, formsController.createForm);
 
 router.patch('/forms/:key', checkAccessToken, formsController.updateForm);
 
-router.get('/forms/:key', checkAccessToken, formsController.getFormByKey);
+router.get('/forms/:key', checkAccessToken, formsController.updateForm);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const MESSAGES = require('../constants/messages');
 const createForm = require('../service/form/createForm');
-const { Forms } = require('../db/index');
+const { Forms, User } = require('../db/index');
 
 exports.createForm = async (req, res) => {
 	try {
@@ -36,29 +36,6 @@ exports.updateForm = async (req, res) => {
 		res.status(200).json({ message: MESSAGES.FORMS.SUCCESS });
 	} catch (err) {
 		console.error(err);
-		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
-	}
-};
-
-exports.getFormByKey = async (req, res) => {
-	try {
-		const { key } = req.params;
-		const form = await Forms.findOne({
-			where: { key },
-			include: [{ model: User, attributes: ['id', 'name', 'surname'] }],
-		});
-
-		if (!form) {
-			return res.status(404).json({ message: MESSAGES.FORMS.NOT_FOUND });
-		}
-
-		if (form.user_id !== req.user.id) {
-			return res.status(403).json({ message: MESSAGES.FORMS.NOT_FOUND });
-		}
-
-		res.json(form);
-	} catch (error) {
-		console.error(error);
 		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
 	}
 };
