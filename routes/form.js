@@ -6,4 +6,6 @@ const checkAccessToken = require('../middleware/checkAccessToken');
 
 router.post('/create-form', checkAccessToken, formsController.createForm);
 
+router.patch('/forms/:key', checkAccessToken, formsController.updateForm);
+
 module.exports = router;

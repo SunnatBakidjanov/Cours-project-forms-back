@@ -19,12 +19,12 @@ const Form = (sequelize, DataTypes) => {
 				defaultValue: () => uuidv4(),
 			},
 			title: {
-				type: DataTypes.STRING(100),
+				type: DataTypes.STRING(50),
 				allowNull: true,
 				defaultValue: null,
 			},
 			description: {
-				type: DataTypes.TEXT,
+				type: DataTypes.STRING(255),
 				allowNull: true,
 				defaultValue: null,
 			},

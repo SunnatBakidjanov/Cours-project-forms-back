@@ -25,6 +25,8 @@ const MESSAGES = Object.freeze({
 
 	FORMS: {
 		CREATE: 'FORM_CREATED',
+		NOT_FOUND: 'FORM_NOT_FOUND',
+		SUCCESS: 'SUCCESS',
 	},
 
 	TEMPLATES: {
