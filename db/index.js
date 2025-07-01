@@ -23,7 +23,6 @@ module.exports = {
 	User,
 	EmailVerification,
 	RefreshToken,
-	Template,
 	Question,
 	Forms,
 	sequelize,
