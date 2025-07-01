@@ -15,8 +15,6 @@ EmailVerification.belongsTo(User, { foreignKey: 'user_id' });
 RefreshToken.belongsTo(User, { foreignKey: 'user_id' });
 Forms.belongsTo(User, { foreignKey: 'user_id' });
 
-Question.belongsTo(Template, { foreignKey: 'template_id' });
-
 module.exports = {
 	User,
 	EmailVerification,
