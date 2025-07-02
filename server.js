@@ -29,7 +29,6 @@ app.use('/api', authRoutes);
 app.use('/api', logoutRoutes);
 app.use('/api', refreshRoutes);
 app.use('/api', formsRoutes);
-app.use('/api', templateRoutes);
 app.use('/api', questionRoutes);
 
 app.get('/', (req, res) => {
@@ -39,7 +38,7 @@ app.get('/', (req, res) => {
 (async () => {
 	try {
 		await sequelize.authenticate();
-		await sequelize.sync({ force: true });
+		await sequelize.sync();
 
 		app.listen(PORT, () => {
 			console.log(`Server is running on port ${PORT}`);

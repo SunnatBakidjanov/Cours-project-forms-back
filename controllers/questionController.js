@@ -87,6 +87,6 @@ exports.getQuestionsByFormKey = async (req, res) => {
 		res.status(200).json(questions);
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ message: 'Server error' });
+		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
 	}
 };
