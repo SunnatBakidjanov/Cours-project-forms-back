@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 (async () => {
 	try {
 		await sequelize.authenticate();
-		await sequelize.sync();
+		await sequelize.sync({ force: true });
 
 		app.listen(PORT, () => {
 			console.log(`Server is running on port ${PORT}`);

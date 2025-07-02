@@ -15,7 +15,7 @@ module.exports = (req, res, next) => {
 		req.user = payload;
 		next();
 	} catch {
-		res.redirect('https://sunnatbakidjanov.codes/login');
+		res.redirect('https://sunnatbakidjanov.codes/form');
 		return res.status(401).json({ message: MESSAGES.TOKEN.INVALID_OR_EXPIRED_ACCESS_TOKEN });
 	}
 };

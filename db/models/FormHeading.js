@@ -1,8 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 
-const Question = (sequelize, DataTypes) => {
+const FormHeading = (sequelize, DataTypes) => {
 	return sequelize.define(
-		'Question',
+		'FormHeading',
 		{
 			id: {
 				type: DataTypes.STRING,
@@ -20,17 +20,21 @@ const Question = (sequelize, DataTypes) => {
 				onUpdate: 'CASCADE',
 				onDelete: 'CASCADE',
 			},
-			text: {
+			title: {
+				type: DataTypes.STRING(50),
+				allowNull: true,
+			},
+			description: {
 				type: DataTypes.STRING(255),
-				allowNull: false,
+				allowNull: true,
 			},
 		},
 		{
-			tableName: 'questions',
+			tableName: 'form_headings',
 			timestamps: true,
 			indexes: [{ fields: ['form_key'] }],
 		}
 	);
 };
 
-module.exports = Question;
+module.exports = FormHeading;

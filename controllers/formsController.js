@@ -66,7 +66,7 @@ exports.formPublic = async (req, res) => {
 	const { isPublic } = req.body;
 
 	if (typeof isPublic !== 'boolean') {
-		return res.status(400).json({ message: 'Поле isPublic должно быть boolean.' });
+		return res.status(400).json({ message: MESSAGES.FORMS.PUBLISH_BOOLEAN });
 	}
 
 	try {
