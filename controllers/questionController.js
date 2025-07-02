@@ -1,5 +1,6 @@
 const { Question, Forms } = require('../db/index');
 const MESSAGES = require('../constants/messages');
+const { v4: uuidv4 } = require('uuid');
 
 exports.createQuestion = async (req, res) => {
 	const { key } = req.params;
@@ -12,12 +13,13 @@ exports.createQuestion = async (req, res) => {
 		if (form.user_id !== req.user.id) return res.status(403).json({ message: MESSAGES.USER.USER_NOT_FOUND });
 
 		const question = await Question.create({
+			id: uuidv4(),
 			form_key: key,
 			text,
 		});
 
 		res.status(201).json({
-			question,
+			...question.toJSON(),
 			message: MESSAGES.QUESTIONS.CREATED,
 		});
 	} catch (error) {
