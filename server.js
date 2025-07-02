@@ -9,7 +9,6 @@ const authRoutes = require('./routes/auth');
 const logoutRoutes = require('./routes/logout');
 const refreshRoutes = require('./routes/token');
 const formsRoutes = require('./routes/form');
-const templateRoutes = require('./routes/templates');
 const questionRoutes = require('./routes/question');
 
 const app = express();
