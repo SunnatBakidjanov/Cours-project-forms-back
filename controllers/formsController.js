@@ -60,3 +60,35 @@ exports.getFormByKey = async (req, res) => {
 		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
 	}
 };
+
+exports.formPublic = async (req, res) => {
+	const { key } = req.params;
+	const { isPublic } = req.body;
+
+	if (typeof isPublic !== 'boolean') {
+		return res.status(400).json({ message: 'Поле isPublic должно быть boolean.' });
+	}
+
+	try {
+		const form = await Forms.findOne({ where: { key } });
+
+		if (!form) {
+			return res.status(404).json({ message: MESSAGES.FORMS.NOT_FOUND });
+		}
+
+		if (form.user_id !== req.user.id) {
+			return res.status(403).json({ message: MESSAGES.USER.USER_NOT_FOUND });
+		}
+
+		form.isPublic = isPublic;
+		await form.save();
+
+		res.status(200).json({
+			message: MESSAGES.FORMS.SUCCESS,
+			isPublic: form.isPublic,
+		});
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
+	}
+};
