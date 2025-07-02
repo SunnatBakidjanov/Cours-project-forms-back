@@ -9,7 +9,7 @@ const authRoutes = require('./routes/auth');
 const logoutRoutes = require('./routes/logout');
 const refreshRoutes = require('./routes/token');
 const formsRoutes = require('./routes/form');
-const questionRoutes = require('./routes/question');
+const questionRoutes = require('./routes/questions');
 
 const app = express();
 const PORT = process.env.PORT || 3306;
