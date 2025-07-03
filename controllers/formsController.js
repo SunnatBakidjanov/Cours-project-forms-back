@@ -98,7 +98,7 @@ exports.getAllForms = async (req, res) => {
 		const forms = await Forms.findAll({
 			include: {
 				model: User,
-				attributes: ['first_name', 'last_name'],
+				attributes: ['name', 'surname'],
 			},
 			order: [['createdAt', 'DESC']],
 		});
