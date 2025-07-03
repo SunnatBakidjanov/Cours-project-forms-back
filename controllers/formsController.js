@@ -92,3 +92,20 @@ exports.formPublic = async (req, res) => {
 		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
 	}
 };
+
+exports.getAllForms = async (req, res) => {
+	try {
+		const forms = await Forms.findAll({
+			include: {
+				model: User,
+				attributes: ['first_name', 'last_name'],
+			},
+			order: [['createdAt', 'DESC']],
+		});
+
+		res.status(200).json(forms);
+	} catch (err) {
+		console.error(err);
+		res.status(500).json({ message: MESSAGES.SERVER_ERROR });
+	}
+};
